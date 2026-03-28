@@ -1,0 +1,48 @@
+{
+  "name": "invoicefi",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "compile": "cd smart-contracts && npx hardhat compile",
+    "test": "cd smart-contracts && npx hardhat test",
+    "deploy": "cd smart-contracts && npx hardhat run scripts/deploy.js --network mumbai",
+    "deploy:local": "cd smart-contracts && npx hardhat run scripts/deploy.js --network localhost",
+    "node": "cd smart-contracts && npx hardhat node",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:start": "cd frontend && npm run start",
+    "install:all": "npm install && cd frontend && npm install && cd .."
+  },
+  "dependencies": {
+    "next": "14.2.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ethers": "^6.13.2",
+    "axios": "^1.7.5",
+    "@openzeppelin/contracts": "^5.0.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
+    "@nomicfoundation/hardhat-ethers": "^3.0.6",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.11",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/chai": "^4",
+    "@types/mocha": "^10",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.19",
+    "chai": "^4",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.6",
+    "hardhat": "^2.22.9",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5",
+    "ts-node": "^10.9.2"
+  }
+}
