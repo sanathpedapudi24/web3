@@ -7,7 +7,11 @@
       "Bash(npm run:*)",
       "Bash(npm init:*)",
       "Bash(npm uninstall:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(npx hardhat:*)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3001)",
+      "Bash(taskkill:*)"
     ]
   }
 }

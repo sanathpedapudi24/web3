@@ -26,11 +26,12 @@ async function main() {
 
   // Mint test tokens for team members
   const signers = await hre.ethers.getSigners();
+  const tokenDecimals = await mockUSDC.decimals();
   console.log("\n=== Minting Test Tokens ===");
 
   // Mint 10,000 USDC to each signer for testing
   for (let i = 0; i < Math.min(5, signers.length); i++) {
-    await mockUSDC.mint(signers[i].address, 10000 * 10**6);
+    await mockUSDC.mint(signers[i].address, hre.ethers.parseUnits("10000", Number(tokenDecimals)));
     console.log(`Minted 10,000 mUSDC to ${signers[i].address}`);
   }
 

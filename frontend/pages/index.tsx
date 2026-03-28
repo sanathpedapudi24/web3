@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 import WalletConnect from '../components/WalletConnect';
 import Link from 'next/link';
+import Navbar from '../components/Navbar';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
@@ -14,121 +15,109 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-        {/* Navigation */}
-        <nav className="bg-white shadow-sm">
-          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div className="text-2xl font-bold text-primary-600">InvoiceFi</div>
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="text-gray-600 hover:text-primary-600 font-medium">
-                Dashboard
-              </Link>
-              <WalletConnect onConnect={setWalletAddress} />
-            </div>
-          </div>
-        </nav>
+      <main className="min-h-screen bg-gray-50 text-gray-900">
+        <Navbar
+          account={walletAddress}
+          rightContent={<WalletConnect onConnect={setWalletAddress} />}
+        />
 
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 py-20 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Unlock Working Capital
-            <br />
-            <span className="text-primary-600">For Every Supplier</span>
+        <section className="mx-auto w-full max-w-6xl px-4 py-20 text-center md:py-24">
+          <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-gray-900 md:text-6xl">
+            Invoice financing for modern supply chains
           </h1>
-
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
-            Small and mid-sized suppliers are forced to wait 60–120 days for invoice payments,
-            creating severe cash flow crises. InvoiceFi tokenizes unpaid invoices as on-chain assets,
-            enabling instant access to liquidity from decentralized lending pools.
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-gray-600">
+            Convert unpaid invoices into financing-ready on-chain assets, get early liquidity,
+            and keep repayment transparent for all participants.
           </p>
 
-          <div className="flex flex-wrap gap-4 justify-center mb-16">
-            <Link href="/create-invoice" className="btn-primary text-lg">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/create-invoice"
+              className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:scale-[1.02] hover:bg-indigo-700"
+            >
               Create Invoice
             </Link>
-            <Link href="/lender" className="btn-secondary text-lg">
+            <Link
+              href="/lender"
+              className="rounded-md border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-100"
+            >
               Provide Liquidity
             </Link>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-20">
-            <div className="card">
-              <div className="text-4xl font-bold text-primary-600 mb-2">60-120</div>
-              <div className="text-gray-600">Days payment delay</div>
+          <div className="mt-14 grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl border border-gray-200 bg-white p-6 text-left transition-all duration-200 hover:scale-[1.02]">
+              <div className="text-3xl font-semibold text-gray-900">60-120</div>
+              <p className="mt-2 text-sm text-gray-600">Typical payment delay in B2B invoicing</p>
             </div>
-            <div className="card">
-              <div className="text-4xl font-bold text-primary-600 mb-2">$240B+</div>
-              <div className="text-gray-600">Indian MSME credit gap</div>
+            <div className="rounded-xl border border-gray-200 bg-white p-6 text-left transition-all duration-200 hover:scale-[1.02]">
+              <div className="text-3xl font-semibold text-gray-900">$240B+</div>
+              <p className="mt-2 text-sm text-gray-600">Estimated MSME credit gap in India</p>
             </div>
-            <div className="card">
-              <div className="text-4xl font-bold text-primary-600 mb-2">5%</div>
-              <div className="text-gray-600">Interest rate (vs 18-36% banks)</div>
-            </div>
-          </div>
-        </section>
-
-        {/* How It Works */}
-        <section className="bg-white py-20">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center text-2xl font-bold text-primary-600 mx-auto mb-4">
-                  1
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Tokenize Invoice</h3>
-                <p className="text-gray-600">
-                  Supplier creates invoice NFT representing unpaid receivable from a verified buyer
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center text-2xl font-bold text-primary-600 mx-auto mb-4">
-                  2
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Access Liquidity</h3>
-                <p className="text-gray-600">
-                  Borrow instantly against invoice from decentralized lending pool (up to 90% value)
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center text-2xl font-bold text-primary-600 mx-auto mb-4">
-                  3
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Auto Repayment</h3>
-                <p className="text-gray-600">
-                  When buyer pays, smart contract automatically repays loan + interest to lenders
-                </p>
-              </div>
+            <div className="rounded-xl border border-gray-200 bg-white p-6 text-left transition-all duration-200 hover:scale-[1.02]">
+              <div className="text-3xl font-semibold text-gray-900">5%</div>
+              <p className="mt-2 text-sm text-gray-600">Target lending rate for faster access</p>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="container mx-auto px-4 py-20 text-center">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">Ready to transform your cash flow?</h2>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link href="/create-invoice" className="btn-primary text-lg">
+        <section className="border-y border-gray-200 bg-white py-16">
+          <div className="mx-auto w-full max-w-6xl px-4">
+            <h2 className="text-2xl font-semibold tracking-tight text-gray-900 md:text-3xl">How it works</h2>
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {[
+                {
+                  title: 'Tokenize invoice',
+                  description:
+                    'Suppliers mint an invoice NFT that represents a verified receivable.',
+                },
+                {
+                  title: 'Borrow from pool',
+                  description:
+                    'Lending liquidity is allocated against that invoice with transparent terms.',
+                },
+                {
+                  title: 'Auto settlement',
+                  description:
+                    'When payment arrives, repayment and interest distribution happen on-chain.',
+                },
+              ].map((item, idx) => (
+                <div key={item.title} className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+                  <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700">
+                    {idx + 1}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-gray-900">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto w-full max-w-6xl px-4 py-16">
+          <div className="flex flex-col items-start justify-between gap-6 rounded-xl border border-gray-200 bg-white p-8 md:flex-row md:items-center">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Start in minutes</h2>
+              <p className="mt-2 text-sm text-gray-600">
+                Connect wallet, create invoice, and manage the full financing flow from your dashboard.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                href="/create-invoice"
+                className="rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-indigo-700"
+              >
                 Get Started
               </Link>
-              <Link href="/dashboard" className="btn-secondary text-lg">
-                View Demo
+              <Link
+                href="/dashboard"
+                className="rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-gray-100"
+              >
+                Open Dashboard
               </Link>
             </div>
           </div>
         </section>
-
-        {/* Footer */}
-        <footer className="bg-gray-900 text-gray-400 py-12">
-          <div className="container mx-auto px-4 text-center">
-            <p>InvoiceFi - Decentralized Supply Chain Finance</p>
-            <p className="text-sm mt-2">Built for Hackathon 2025</p>
-          </div>
-        </footer>
       </main>
     </>
   );

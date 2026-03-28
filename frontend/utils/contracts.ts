@@ -34,9 +34,9 @@ export const StablecoinABI = [
 
 export const CONTRACT_ADDRESSES = {
   localhost: {
-    invoice: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
-    lendingPool: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
-    stablecoin: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+    invoice: process.env.NEXT_PUBLIC_INVOICE_CONTRACT_ADDRESS || "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+    lendingPool: process.env.NEXT_PUBLIC_LENDING_POOL_ADDRESS || "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+    stablecoin: process.env.NEXT_PUBLIC_STABLECOIN_ADDRESS || "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
   }
 };
 
@@ -54,4 +54,29 @@ export async function getContract(abi: any, address: string, signer?: any) {
     return new ethers.Contract(address, abi, signerInstance);
   }
   return new ethers.Contract(address, abi, provider);
+}
+
+export async function isContractDeployed(address: string, provider: any): Promise<boolean> {
+  try {
+    const code = await provider.getCode(address);
+    return code !== '0x';
+  } catch (error) {
+    console.error('Error checking contract deployment:', error);
+    return false;
+  }
+}
+
+export async function getTokenDecimals(address: string, provider: any): Promise<number> {
+  try {
+    const { ethers } = await import('ethers');
+    const contract = new ethers.Contract(
+      address,
+      ['function decimals() view returns (uint8)'],
+      provider
+    );
+    return await contract.decimals();
+  } catch (error) {
+    console.error('Error fetching decimals, defaulting to 6:', error);
+    return 6;
+  }
 }

@@ -11,7 +11,7 @@ export default function Dashboard() {
     const init = async () => {
       if (typeof window !== 'undefined' && window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
-        const accounts = await provider.send('eth_requestAccounts', []);
+        const accounts = await provider.send('eth_accounts', []);
         if (accounts.length > 0) {
           setAccount(accounts[0]);
         }
@@ -21,9 +21,22 @@ export default function Dashboard() {
   }, []);
 
   const fetchInvoices = async () => {
-    if (!account || !contractAddress) return;
+    if (!(window as any).ethereum) {
+      alert('MetaMask is not detected. Please install or enable MetaMask first.');
+      return;
+    }
 
-    const provider = new ethers.BrowserProvider(window.ethereum);
+    if (!account) {
+      alert('Please connect your wallet before loading invoices.');
+      return;
+    }
+
+    if (!contractAddress.trim()) {
+      alert('Please enter the Invoice contract address.');
+      return;
+    }
+
+    const provider = new ethers.BrowserProvider((window as any).ethereum);
     const invoiceContract = new ethers.Contract(contractAddress, InvoiceABI, provider);
 
     // For demo: assuming invoice IDs start from 0 and are sequential
