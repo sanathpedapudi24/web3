@@ -8,7 +8,9 @@ import WalletConnect from '../components/WalletConnect';
 export default function CreateInvoice() {
   const router = useRouter();
   const [account, setAccount] = useState<string | null>(null);
-  const [contractAddress, setContractAddress] = useState('');
+  const [contractAddress, setContractAddress] = useState(
+    process.env.NEXT_PUBLIC_INVOICE_CONTRACT_ADDRESS || ''
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     buyerAddress: '',
@@ -86,17 +88,16 @@ export default function CreateInvoice() {
 
       const amountWei = ethers.parseUnits(formData.amount, 6);
 
-      const metadata = {
-        invoiceNumber: formData.invoiceNumber,
-        description: formData.description,
-        supplier: account,
-        buyer: formData.buyerAddress,
-        amount: formData.amount,
-        currency: 'USDC',
-        createdAt: new Date().toISOString(),
-      };
+      // Build a stable invoice identity. Same invoice details are treated as duplicates.
+      const canonicalInvoiceId = [
+        formData.invoiceNumber.trim().toLowerCase(),
+        formData.buyerAddress.trim().toLowerCase(),
+        amountWei.toString(),
+        String(dueDateTimestamp),
+        account.toLowerCase(),
+      ].join('|');
 
-      const invoiceHash = `Qm${Buffer.from(JSON.stringify(metadata)).toString('hex').slice(0, 44)}`;
+      const invoiceHash = `ipfs://invoice/${ethers.keccak256(ethers.toUtf8Bytes(canonicalInvoiceId))}`;
 
       const tx = await invoiceContract.createInvoice(
         formData.buyerAddress,
@@ -106,11 +107,22 @@ export default function CreateInvoice() {
       );
 
       await tx.wait();
-      alert('Invoice created successfully! Token ID: ' + (await invoiceContract.tokenURI(0)));
+      alert('Invoice created successfully.');
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Error creating invoice:', error);
-      alert('Failed to create invoice: ' + (error.message || error));
+      const reason =
+        error?.reason ||
+        error?.shortMessage ||
+        error?.info?.error?.message ||
+        error?.message ||
+        String(error);
+
+      if (String(reason).toLowerCase().includes('invoice already tokenized')) {
+        alert('This invoice appears to already be tokenized. Change invoice number or details and try again.');
+      } else {
+        alert('Failed to create invoice: ' + reason);
+      }
     } finally {
       setIsSubmitting(false);
     }
